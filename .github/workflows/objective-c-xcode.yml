@@ -1,0 +1,22 @@
+name: Build dylib
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Compile dylib
+        run: |
+          xcrun -sdk iphoneos clang -arch arm64 -shared \
+            -fobjc-arc -framework Foundation -framework UIKit \
+            -o LocalSearchOnly.dylib tweak.m
+            
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LocalSearchOnly-dylib
+          path: LocalSearchOnly.dylib
